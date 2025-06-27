@@ -24,6 +24,18 @@ void glm_vec2_sub(vec2 a, vec2 b, vec2 dest)
         dest[i] = a[i] - b[i];
 }
 
+void glm_vec2_mul(vec2 a, vec2 b, vec2 dest)
+{
+    for (int i = 0; i < 2; i++)
+        dest[i] = a[i] * b[i];
+}
+
+void glm_vec2_div(vec2 a, vec2 b, vec2 dest)
+{
+    for (int i = 0; i < 2; i++)
+        dest[i] = a[i] / b[i];
+}
+
 float glm_vec2_norm2(vec2 v)
 {
     float norm2 = 0;
@@ -90,6 +102,30 @@ int glm_vec2_eq(vec2 v, float val)
     return eq;
 }
 
+void glm_vec2_reflect(vec2 v, vec2 n, vec2 dest)
+{
+    vec2 t = {0};
+    glm_vec2_copy(n, t);
+    glm_vec2_scale(t, 2 * glm_vec2_dot(v, n), t);
+    glm_vec2_sub(v, t, dest);
+}
+
+void glm_vec2_refract(vec2 uv, vec2 n, float eta, vec2 dest)
+{
+    vec2 nuv = {0};
+    glm_vec2_scale(uv, -1, nuv);
+    float cos_theta = min(glm_vec2_dot(nuv, n), 1.0f);
+    vec2 r_out_perp = {0};
+    glm_vec2_copy(n, r_out_perp);
+    glm_vec2_scale(r_out_perp, cos_theta, r_out_perp);
+    glm_vec2_add(r_out_perp, uv, r_out_perp);
+    glm_vec2_scale(r_out_perp, eta, r_out_perp);
+    vec2 r_out_parallel = {0};
+    glm_vec2_copy(n, r_out_parallel);
+    glm_vec2_scale(r_out_parallel, (float) -sqrt(fabs(1.0f - glm_vec2_norm2(r_out_perp))), r_out_parallel);
+    glm_vec2_add(r_out_perp, r_out_parallel, dest);
+}
+
 void glm_vec3_scale(vec3 v, float k, vec3 dest)
 {
     for (int i = 0; i < 3; i++)
@@ -111,6 +147,18 @@ void glm_vec3_sub(vec3 a, vec3 b, vec3 dest)
 {
     for (int i = 0; i < 3; i++)
         dest[i] = a[i] - b[i];
+}
+
+void glm_vec3_mul(vec3 a, vec3 b, vec3 dest)
+{
+    for (int i = 0; i < 3; i++)
+        dest[i] = a[i] * b[i];
+}
+
+void glm_vec3_div(vec3 a, vec3 b, vec3 dest)
+{
+    for (int i = 0; i < 3; i++)
+        dest[i] = a[i] / b[i];
 }
 
 float glm_vec3_norm2(vec3 v)
@@ -179,6 +227,30 @@ void glm_vec3_swap(vec3 a, vec3 b)
     glm_vec3_copy(t, b);
 }
 
+void glm_vec3_reflect(vec3 v, vec3 n, vec3 dest)
+{
+    vec3 t = {0};
+    glm_vec3_copy(n, t);
+    glm_vec3_scale(t, 2 * glm_vec3_dot(v, n), t);
+    glm_vec3_sub(v, t, dest);
+}
+
+void glm_vec3_refract(vec3 uv, vec3 n, float eta, vec3 dest)
+{
+    vec3 nuv = {0};
+    glm_vec3_scale(uv, -1, nuv);
+    float cos_theta = min(glm_vec3_dot(nuv, n), 1.0f);
+    vec3 r_out_perp = {0};
+    glm_vec3_copy(n, r_out_perp);
+    glm_vec3_scale(r_out_perp, cos_theta, r_out_perp);
+    glm_vec3_add(r_out_perp, uv, r_out_perp);
+    glm_vec3_scale(r_out_perp, eta, r_out_perp);
+    vec3 r_out_parallel = {0};
+    glm_vec3_copy(n, r_out_parallel);
+    glm_vec3_scale(r_out_parallel, (float) -sqrt(fabs(1.0f - glm_vec3_norm2(r_out_perp))), r_out_parallel);
+    glm_vec3_add(r_out_perp, r_out_parallel, dest);
+}
+
 int glm_vec3_eq(vec3 v, float val)
 {
     int eq = 1;
@@ -208,6 +280,18 @@ void glm_vec4_sub(vec4 a, vec4 b, vec4 dest)
 {
     for (int i = 0; i < 4; i++)
         dest[i] = a[i] - b[i];
+}
+
+void glm_vec4_mul(vec4 a, vec4 b, vec4 dest)
+{
+    for (int i = 0; i < 4; i++)
+        dest[i] = a[i] * b[i];
+}
+
+void glm_vec4_div(vec4 a, vec4 b, vec4 dest)
+{
+    for (int i = 0; i < 4; i++)
+        dest[i] = a[i] / b[i];
 }
 
 float glm_vec4_norm2(vec4 v)
@@ -274,6 +358,30 @@ int glm_vec4_eq(vec4 v, float val)
     for (int i = 0; i < 4; i++)
         eq &= (v[i] == val);
     return eq;
+}
+
+void glm_vec4_reflect(vec4 v, vec4 n, vec4 dest)
+{
+    vec4 t = {0};
+    glm_vec4_copy(n, t);
+    glm_vec4_scale(t, 2 * glm_vec4_dot(v, n), t);
+    glm_vec4_sub(v, t, dest);
+}
+
+void glm_vec4_refract(vec4 uv, vec4 n, float eta, vec4 dest)
+{
+    vec4 nuv = {0};
+    glm_vec4_scale(uv, -1, nuv);
+    float cos_theta = min(glm_vec4_dot(nuv, n), 1.0f);
+    vec4 r_out_perp = {0};
+    glm_vec4_copy(n, r_out_perp);
+    glm_vec4_scale(r_out_perp, cos_theta, r_out_perp);
+    glm_vec4_add(r_out_perp, uv, r_out_perp);
+    glm_vec4_scale(r_out_perp, eta, r_out_perp);
+    vec4 r_out_parallel = {0};
+    glm_vec4_copy(n, r_out_parallel);
+    glm_vec4_scale(r_out_parallel, (float) -sqrt(fabs(1.0f - glm_vec4_norm2(r_out_perp))), r_out_parallel);
+    glm_vec4_add(r_out_perp, r_out_parallel, dest);
 }
 
 void glm_mat2_zero(mat2 m)
